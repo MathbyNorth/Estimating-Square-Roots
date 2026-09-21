@@ -81,7 +81,48 @@ Start Game
 <button onclick="checkAnswer()">
 Submit
 </button>
+<button onclick="showSolution()">
+Solution
+</button>
+function showSolution(){
 
+    let low = Math.floor(currentRoot);
+    let high = low + 1;
+
+    document.getElementById("feedback").innerHTML =
+
+    "<h3>Solution</h3>" +
+
+    "<p>" +
+
+    low + "² = " + (low*low) +
+
+    "<br>" +
+
+    high + "² = " + (high*high) +
+
+    "</p>" +
+
+    "<p>" +
+
+    "Therefore √" + currentNumber +
+
+    " lies between " +
+
+    low + " and " + high +
+
+    "</p>" +
+
+    "<p>" +
+
+    "√" + currentNumber +
+
+    " ≈ " +
+
+    currentRoot.toFixed(2) +
+
+    "</p>";
+}    
 <button onclick="newQuestion()">
 Next Question
 </button>
