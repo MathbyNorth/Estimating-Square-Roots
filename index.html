@@ -64,7 +64,7 @@ input{
 
 <div id="menu">
 
-<button onclick="alert('Start button works');startGame();">
+<button onclick="startGame();">
 Start Game
 </button>
 
@@ -79,11 +79,6 @@ Start Game
 <br><br>
 
 <button onclick="checkAnswer()">
-Submit
-</button>
-<button onclick="showSolution()">
-Solution
-</button>
 function showSolution(){
 
     let low = Math.floor(currentRoot);
@@ -91,38 +86,32 @@ function showSolution(){
 
     document.getElementById("feedback").innerHTML =
 
-    "<h3>Solution</h3>" +
+        "<h3>Solution</h3>" +
 
-    "<p>" +
+        "<p>" +
+        low + "² = " + (low*low) +
+        "<br>" +
+        high + "² = " + (high*high) +
+        "</p>" +
 
-    low + "² = " + (low*low) +
+        "<p>" +
+        "Therefore √" + currentNumber +
+        " lies between " +
+        low + " and " + high +
+        "</p>" +
 
-    "<br>" +
-
-    high + "² = " + (high*high) +
-
-    "</p>" +
-
-    "<p>" +
-
-    "Therefore √" + currentNumber +
-
-    " lies between " +
-
-    low + " and " + high +
-
-    "</p>" +
-
-    "<p>" +
-
-    "√" + currentNumber +
-
-    " ≈ " +
-
-    currentRoot.toFixed(2) +
-
-    "</p>";
-}    
+        "<p>" +
+        "√" + currentNumber +
+        " ≈ " +
+        currentRoot.toFixed(2) +
+        "</p>";
+}
+Submit
+</button>
+<button onclick="showSolution()">
+Solution
+</button>
+  
 <button onclick="newQuestion()">
 Next Question
 </button>
@@ -175,18 +164,22 @@ function checkAnswer(){
         return;
     }
 
-    if(Math.abs(answer-currentRoot)<=0.15){
+if(Math.abs(answer-currentRoot)<=0.15){
 
-        document.getElementById("feedback").innerHTML =
-        "✅ Correct!";
-    }
-    else{
+    document.getElementById("feedback").innerHTML =
+    "✅ Correct!";
 
-        document.getElementById("feedback").innerHTML =
-        "❌ Correct answer: " +
-        currentRoot.toFixed(2);
-    }
+    setTimeout(newQuestion,2000);
+
 }
+else{
+
+    document.getElementById("feedback").innerHTML =
+    "❌ Correct answer: " +
+    currentRoot.toFixed(2);
+
+    setTimeout(newQuestion,2000);
+}    
 
 </script>
 
