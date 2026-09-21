@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Approximate Square Root Challenge V2</title>
 
 <style>
@@ -24,78 +23,34 @@ body{
     box-shadow:0 0 15px rgba(0,0,0,0.2);
 }
 
-h1{
-    color:#0d47a1;
-}
-
-.stats{
-    display:flex;
-    justify-content:space-around;
-    flex-wrap:wrap;
-    margin-bottom:15px;
-}
-
-.card{
-    background:#f1f1f1;
-    padding:10px;
-    border-radius:10px;
-    min-width:130px;
-}
-
 button{
-    padding:10px 16px;
+    padding:10px 15px;
     margin:5px;
-    border:none;
-    border-radius:8px;
     cursor:pointer;
-    color:white;
 }
 
-.start{
-    background:#1e88e5;
-}
-
-.control{
-    background:#546e7a;
+#gameArea{
+    display:none;
 }
 
 #question{
     font-size:32px;
     font-weight:bold;
-    margin:25px;
+    margin:20px;
 }
 
 input{
-    width:150px;
     padding:10px;
-    text-align:center;
     font-size:20px;
+    width:150px;
+    text-align:center;
 }
 
 #feedback{
     margin-top:20px;
-    background:#f7f7f7;
-    padding:15px;
+    padding:10px;
+    background:#f5f5f5;
     border-radius:10px;
-    min-height:100px;
-}
-
-#progressBar{
-    width:100%;
-    height:25px;
-    background:#ddd;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-#progress{
-    width:0%;
-    height:100%;
-    background:#43a047;
-}
-
-#gameArea{
-    display:none;
 }
 
 </style>
@@ -109,9 +64,7 @@ input{
 
 <div id="menu">
 
-<h2>Ready to Play?</h2>
-
-<button class="start" onclick="startGame()">
+<button onclick="startGame()">
 Start Game
 </button>
 
@@ -119,48 +72,17 @@ Start Game
 
 <div id="gameArea">
 
-<div class="stats">
-
-<div class="card">
-Question<br>
-<span id="questionCount">1 / 10</span>
-</div>
-
-<div class="card">
-Score<br>
-<span id="score">0</span>
-</div>
-
-<div class="card">
-Streak<br>
-<span id="streak">0</span>
-</div>
-
-</div>
-
-<div id="progressBar">
-<div id="progress"></div>
-</div>
-
-<div id="question"></div>
+<h2 id="question"></h2>
 
 <input id="answer" type="number" step="0.1">
 
 <br><br>
 
-<button class="control" onclick="submitAnswer()">
+<button onclick="checkAnswer()">
 Submit
 </button>
 
-<button class="control" onclick="showHint()">
-Hint
-</button>
-
-<button class="control" onclick="showSolution()">
-Solution
-</button>
-
-<button class="control" onclick="nextQuestion()">
+<button onclick="newQuestion()">
 Next Question
 </button>
 
@@ -175,24 +97,20 @@ Next Question
 let currentNumber;
 let currentRoot;
 
-let score = 0;
-let streak = 0;
-let questionNumber = 1;
-
 function startGame(){
 
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("gameArea").style.display = "block";
+    document.getElementById("menu").style.display="none";
+    document.getElementById("gameArea").style.display="block";
 
-    generateQuestion();
+    newQuestion();
 }
 
-function generateQuestion(){
+function newQuestion(){
 
-    currentNumber = Math.floor(Math.random() * 400) + 1;
+    currentNumber = Math.floor(Math.random()*400)+1;
 
     while(Number.isInteger(Math.sqrt(currentNumber))){
-        currentNumber = Math.floor(Math.random() * 400) + 1;
+        currentNumber = Math.floor(Math.random()*400)+1;
     }
 
     currentRoot = Math.sqrt(currentNumber);
@@ -201,30 +119,35 @@ function generateQuestion(){
     "Estimate √" + currentNumber + " to the nearest tenth";
 
     document.getElementById("answer").value = "";
+
+    document.getElementById("feedback").innerHTML = "";
 }
 
-function submitAnswer(){
+function checkAnswer(){
 
-    let studentAnswer =
+    let answer =
     parseFloat(document.getElementById("answer").value);
 
-    if(isNaN(studentAnswer)){
+    if(isNaN(answer)){
         document.getElementById("feedback").innerHTML =
         "Please enter an estimate.";
         return;
     }
 
-    let tolerance = 0.15;
-
-    if(Math.abs(studentAnswer - currentRoot) <= tolerance){
-
-        score++;
-        streak++;
+    if(Math.abs(answer-currentRoot)<=0.15){
 
         document.getElementById("feedback").innerHTML =
-        "✅ Correct! √" +
-        currentNumber +
-        " ≈ " +
-        currentRoot.toFixed(2);
+        "✅ Correct!";
+    }
+    else{
 
-    
+        document.getElementById("feedback").innerHTML =
+        "❌ Correct answer: " +
+        currentRoot.toFixed(2);
+    }
+}
+
+</script>
+
+</body>
+</html>
