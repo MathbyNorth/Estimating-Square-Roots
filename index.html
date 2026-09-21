@@ -1,124 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Approximate Square Root Challenge V2</title>
+<title>Estimating Square Roots</title>
 
 <style>
-
 body{
-    font-family:Arial,sans-serif;
-    background:#eef4ff;
-    margin:0;
-    padding:20px;
-    text-align:center;
+font-family:Arial;
+text-align:center;
+background:#eef4ff;
+padding:20px;
 }
 
 .container{
-    max-width:1000px;
-    margin:auto;
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 0 15px rgba(0,0,0,.2);
-}
-
-h1{
-    color:#0d47a1;
-}
-
-.stats{
-    display:flex;
-    justify-content:space-around;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-}
-
-.card{
-    background:#f1f1f1;
-    padding:10px;
-    border-radius:10px;
-    min-width:140px;
-}
-
-button{
-    padding:12px 18px;
-    margin:5px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    color:white;
-    font-size:16px;
-}
-
-.menuButton{
-    background:#1e88e5;
-}
-
-.control{
-    background:#546e7a;
-}
-
-#question{
-    font-size:34px;
-    font-weight:bold;
-    margin:25px;
-}
-
-input{
-    padding:10px;
-    width:150px;
-    font-size:20px;
-    text-align:center;
-}
-
-#feedback{
-    margin-top:20px;
-    padding:15px;
-    border-radius:10px;
-    background:#f7f7f7;
-    min-height:80px;
-}
-
-#progressBar{
-    height:25px;
-    background:#ddd;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-#progress{
-    width:0%;
-    height:100%;
-    background:#43a047;
-}
-
-.numberLine{
-    font-family:monospace;
-    white-space:pre;
-    font-size:18px;
+background:white;
+max-width:800px;
+margin:auto;
+padding:20px;
+border-radius:10px;
 }
 
 #gameArea{
-    display:none;
+display:none;
 }
 
+button{
+padding:10px 15px;
+margin:5px;
+}
 </style>
-</head>
 
+</head>
 <body>
 
 <div class="container">
 
-<h1>🎯 Approximate Square Root Challenge V2</h1>
+<h1>Approximate Square Root Challenge V2</h1>
 
 <div id="menu">
 
-<h2>Select Mode</h2>
-
-<button class="menuButton" onclick="alert('Button Works!')">
+<button onclick="startGame()">
 Start Game
 </button>
 
@@ -126,41 +46,17 @@ Start Game
 
 <div id="gameArea">
 
-<div class="stats">
-
-<div class="card">
-Question<br>
-<span id="questionCount">1 / 10</span>
-</div>
-
-<div class="card">
-Score<br>
-<span id="score">0</span>
-</div>
-
-<div class="card">
-Streak<br>
-<span id="streak">0</span>
-</div>
-
-</div>
-
-<div id="progressBar">
-<div id="progress"></div>
-</div>
-
-<div id="question"></div>
+<h2 id="question"></h2>
 
 <input id="answer" type="number" step="0.1">
 
 <br><br>
 
-<button class="control" onclick="submitAnswer()">Submit</button>
-<button class="control" onclick="showHint()">Hint</button>
-<button class="control" onclick="showSolution()">Solution</button>
-<button class="control" onclick="nextQuestion()">Next Question</button>
+<button onclick="checkAnswer()">
+Submit
+</button>
 
-<div id="feedback"></div>
+<p id="feedback"></p>
 
 </div>
 
@@ -171,69 +67,51 @@ Streak<br>
 let currentNumber;
 let currentRoot;
 
-let score = 0;
-let streak = 0;
-let questionNumber = 1;
-
 function startGame(){
 
-    document.getElementById("menu").style.display="none";
-    document.getElementById("gameArea").style.display="block";
+document.getElementById("menu").style.display="none";
+document.getElementById("gameArea").style.display="block";
 
-    generateQuestion();
+newQuestion();
+
 }
 
-function generateQuestion(){
+function newQuestion(){
 
-    currentNumber = Math.floor(Math.random()*400)+1;
+currentNumber=Math.floor(Math.random()*400)+1;
 
-    while(Number.isInteger(Math.sqrt(currentNumber))){
-        currentNumber = Math.floor(Math.random()*400)+1;
-    }
-
-    currentRoot = Math.sqrt(currentNumber);
-
-    document.getElementById("question").innerHTML =
-    `Estimate √${currentNumber} to the nearest tenth`;
-
-    document.getElementById("answer").value="";
-
-    updateProgress();
+while(Number.isInteger(Math.sqrt(currentNumber))){
+currentNumber=Math.floor(Math.random()*400)+1;
 }
 
-function submitAnswer(){
+currentRoot=Math.sqrt(currentNumber);
 
-    let student =
-    parseFloat(document.getElementById("answer").value);
+document.getElementById("question").innerHTML=
+"Estimate √" + currentNumber;
 
-    if(isNaN(student)){
-        document.getElementById("feedback").innerHTML =
-        "Please enter an estimate.";
-        return;
-    }
-
-    let tolerance = 0.15;
-
-    if(Math.abs(student-currentRoot)<=tolerance){
-
-        score++;
-        streak++;
-
-        document.getElementById("feedback").innerHTML =
-        `✅ Correct! √${currentNumber} ≈ ${currentRoot.toFixed(2)}`;
-
-    }
-    else{
-
-        streak=0;
-
-        document.getElementById("feedback").innerHTML =
-        `❌ Not quite. √${currentNumber} ≈ ${currentRoot.toFixed(2)}`;
-    }
-
-    document.getElementById("score").innerHTML = score;
-    document.getElementById("streak").innerHTML = streak;
 }
 
-function showHint(){
+function checkAnswer(){
 
+let answer=
+parseFloat(document.getElementById("answer").value);
+
+if(Math.abs(answer-currentRoot)<=0.15){
+
+document.getElementById("feedback").innerHTML=
+"✅ Correct";
+
+}
+else{
+
+document.getElementById("feedback").innerHTML=
+"❌ Answer: " + currentRoot.toFixed(2);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
