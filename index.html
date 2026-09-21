@@ -1,12 +1,171 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approximate Square Root Challenge</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#eef4ff;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,.2);
+}
+
+#gameArea{
+    display:none;
+}
+
+button{
+    padding:10px 15px;
+    margin:5px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+#question{
+    font-size:28px;
+    margin:20px;
+    font-weight:bold;
+}
+
+input{
+    font-size:20px;
+    padding:10px;
+    width:120px;
+    text-align:center;
+}
+
+#feedback{
+    margin-top:20px;
+    font-size:20px;
+}
+</style>
+
+</head>
 <body>
 
-<h1>Hello Rodney!</h1>
+<div class="container">
 
-<button onclick="alert('It Works!')">
-Click Me
-</button>
+<h1>🎯 Approximate Square Root Challenge</h1>
+
+<div id="menu">
+    <button onclick="startGame()">Start Game</button>
+</div>
+
+<div id="gameArea">
+
+    <div id="question"></div>
+
+    <input id="answer" type="number" step="0.1">
+
+    <br><br>
+
+    <button onclick="checkAnswer()">Submit</button>
+
+    <button onclick="showSolution()">Solution</button>
+
+    <button onclick="newQuestion()">Next Question</button>
+
+    <div id="feedback"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let currentNumber;
+let currentRoot;
+
+function startGame(){
+
+    document.getElementById("menu").style.display="none";
+    document.getElementById("gameArea").style.display="block";
+
+    newQuestion();
+}
+
+function newQuestion(){
+
+    currentNumber=Math.floor(Math.random()*400)+1;
+
+    while(Number.isInteger(Math.sqrt(currentNumber))){
+        currentNumber=Math.floor(Math.random()*400)+1;
+    }
+
+    currentRoot=Math.sqrt(currentNumber);
+
+    document.getElementById("question").innerHTML=
+    "Estimate √" + currentNumber + " to the nearest tenth";
+
+    document.getElementById("answer").value="";
+    document.getElementById("feedback").innerHTML="";
+}
+
+function checkAnswer(){
+
+    let answer=parseFloat(
+    document.getElementById("answer").value);
+
+    if(isNaN(answer)){
+        document.getElementById("feedback").innerHTML=
+        "Please enter an answer.";
+        return;
+    }
+
+    if(Math.abs(answer-currentRoot)<=0.15){
+
+        document.getElementById("feedback").innerHTML=
+        "✅ Correct!";
+
+    }else{
+
+        document.getElementById("feedback").innerHTML=
+        "❌ Correct Answer: " +
+        currentRoot.toFixed(2);
+
+    }
+}
+
+function showSolution(){
+
+    let low=Math.floor(currentRoot);
+    let high=low+1;
+
+    document.getElementById("feedback").innerHTML=
+
+    "<b>Solution</b><br><br>" +
+
+    low + "² = " + (low*low) +
+    "<br>" +
+
+    high + "² = " + (high*high) +
+    "<br><br>" +
+
+    "√" + currentNumber +
+    " is between " +
+    low +
+    " and " +
+    high +
+
+    "<br><br>" +
+
+    "Approximation = " +
+    currentRoot.toFixed(2);
+}
+
+</script>
 
 </body>
 </html>
