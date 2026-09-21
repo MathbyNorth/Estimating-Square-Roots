@@ -1,16 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Approximate Square Root Challenge V2</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#eef4ff;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.2);
+}
+
+h1{
+    color:#0d47a1;
+}
+
+.stats{
+    display:flex;
+    justify-content:space-around;
+    flex-wrap:wrap;
+    margin-bottom:15px;
+}
+
+.card{
+    background:#f1f1f1;
+    padding:10px;
+    border-radius:10px;
+    min-width:130px;
+}
+
+button{
+    padding:10px 16px;
+    margin:5px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    color:white;
+}
+
+.start{
+    background:#1e88e5;
+}
+
+.control{
+    background:#546e7a;
+}
+
+#question{
+    font-size:32px;
+    font-weight:bold;
+    margin:25px;
+}
+
+input{
+    width:150px;
+    padding:10px;
+    text-align:center;
+    font-size:20px;
+}
+
+#feedback{
+    margin-top:20px;
+    background:#f7f7f7;
+    padding:15px;
+    border-radius:10px;
+    min-height:100px;
+}
+
+#progressBar{
+    width:100%;
+    height:25px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+#progress{
+    width:0%;
+    height:100%;
+    background:#43a047;
+}
+
+#gameArea{
+    display:none;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🎯 Approximate Square Root Challenge V2</h1>
+
+<div id="menu">
+
+<h2>Ready to Play?</h2>
+
+<button class="start" onclick="startGame()">
+Start Game
+</button>
+
+</div>
+
+<div id="gameArea">
+
+<div class="stats">
+
+<div class="card">
+Question<br>
+<span id="questionCount">1 / 10</span>
+</div>
+
+<div class="card">
+Score<br>
+<span id="score">0</span>
+</div>
+
+<div class="card">
+Streak<br>
+<span id="streak">0</span>
+</div>
+
+</div>
+
+<div id="progressBar">
+<div id="progress"></div>
+</div>
+
+<div id="question"></div>
+
+<input id="answer" type="number" step="0.1">
+
+<br><br>
+
+<button class="control" onclick="submitAnswer()">
+Submit
+</button>
+
+<button class="control" onclick="showHint()">
+Hint
+</button>
+
+<button class="control" onclick="showSolution()">
+Solution
+</button>
+
+<button class="control" onclick="nextQuestion()">
+Next Question
+</button>
+
+<div id="feedback"></div>
+
+</div>
+
+</div>
+
 <script>
+
+let currentNumber;
+let currentRoot;
+
+let score = 0;
+let streak = 0;
+let questionNumber = 1;
 
 function startGame(){
 
-    alert("Game Started");
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("gameArea").style.display = "block";
 
-    document.getElementById("menu").style.display="none";
-
-    document.getElementById("gameArea").style.display="block";
-
-    document.getElementById("question").innerHTML =
-    "Estimate √73";
-
+    generateQuestion();
 }
 
-</script>
+function generateQuestion(){
+
+    currentNumber = Math.floor(Math.random() * 400) + 1;
+
+    while(Number.isInteger(Math.sqrt(currentNumber))){
+        currentNumber = Math.floor(Math.random() * 400) + 1;
+    }
+
+    currentRoot = Math.sqrt(currentNumber);
+
+    document.getElementById("question").innerHTML =
+    "Estimate √" + currentNumber + " to the nearest tenth";
+
+    document.getElementById("answer").value = "";
+}
+
+function submitAnswer(){
+
+    let studentAnswer =
+    parseFloat(document.getElementById("answer").value);
+
+    if(isNaN(studentAnswer)){
+        document.getElementById("feedback").innerHTML =
+        "Please enter an estimate.";
+        return;
+    }
+
+    let tolerance = 0.15;
+
+    if(Math.abs(studentAnswer - currentRoot) <= tolerance){
+
+        score++;
+        streak++;
+
+        document.getElementById("feedback").innerHTML =
+        "✅ Correct! √" +
+        currentNumber +
+        " ≈ " +
+        currentRoot.toFixed(2);
+
+    
