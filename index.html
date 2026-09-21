@@ -8,49 +8,51 @@
 <style>
 
 body{
-    font-family:Arial,sans-serif;
-    background:#eef4ff;
-    text-align:center;
-    padding:20px;
+    font-family: Arial, sans-serif;
+    background: #eef4ff;
+    text-align: center;
+    padding: 20px;
 }
 
 .container{
-    max-width:900px;
-    margin:auto;
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 0 15px rgba(0,0,0,0.2);
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
 button{
-    padding:10px 15px;
-    margin:5px;
-    cursor:pointer;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 #gameArea{
-    display:none;
+    display: none;
 }
 
 #question{
-    font-size:32px;
-    font-weight:bold;
-    margin:20px;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 20px;
 }
 
 input{
-    padding:10px;
-    font-size:20px;
-    width:150px;
-    text-align:center;
+    padding: 10px;
+    font-size: 20px;
+    width: 150px;
+    text-align: center;
 }
 
 #feedback{
-    margin-top:20px;
-    padding:10px;
-    background:#f5f5f5;
-    border-radius:10px;
+    margin-top: 20px;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    min-height: 60px;
 }
 
 </style>
@@ -60,25 +62,88 @@ input{
 
 <div class="container">
 
-<h1>🎯 Approximate Square Root Challenge V2</h1>
+    <h1>🎯 Approximate Square Root Challenge V2</h1>
 
-<div id="menu">
+    <div id="menu">
+        <button onclick="startGame()">Start Game</button>
+    </div>
 
-<button onclick="startGame();">
-Start Game
-</button>
+    <div id="gameArea">
+
+        <h2 id="question"></h2>
+
+        <input id="answer" type="number" step="0.1">
+
+        <br><br>
+
+        <button onclick="checkAnswer()">Submit</button>
+
+        <button onclick="showSolution()">Solution</button>
+
+        <button onclick="newQuestion()">Next Question</button>
+
+        <div id="feedback"></div>
+
+    </div>
 
 </div>
 
-<div id="gameArea">
+<script>
 
-<h2 id="question"></h2>
+let currentNumber;
+let currentRoot;
 
-<input id="answer" type="number" step="0.1">
+function startGame(){
 
-<br><br>
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("gameArea").style.display = "block";
 
-<button onclick="checkAnswer()">
+    newQuestion();
+}
+
+function newQuestion(){
+
+    currentNumber = Math.floor(Math.random() * 400) + 1;
+
+    while(Number.isInteger(Math.sqrt(currentNumber))){
+        currentNumber = Math.floor(Math.random() * 400) + 1;
+    }
+
+    currentRoot = Math.sqrt(currentNumber);
+
+    document.getElementById("question").innerHTML =
+        "Estimate √" + currentNumber + " to the nearest tenth";
+
+    document.getElementById("answer").value = "";
+
+    document.getElementById("feedback").innerHTML = "";
+}
+
+function checkAnswer(){
+
+    let answer =
+        parseFloat(document.getElementById("answer").value);
+
+    if(isNaN(answer)){
+        document.getElementById("feedback").innerHTML =
+            "Please enter an estimate.";
+        return;
+    }
+
+    if(Math.abs(answer - currentRoot) <= 0.15){
+
+        document.getElementById("feedback").innerHTML =
+            "✅ Correct!";
+
+    } else {
+
+        document.getElementById("feedback").innerHTML =
+            "❌ Correct answer: " +
+            currentRoot.toFixed(2);
+
+    }
+}
+
 function showSolution(){
 
     let low = Math.floor(currentRoot);
@@ -89,9 +154,9 @@ function showSolution(){
         "<h3>Solution</h3>" +
 
         "<p>" +
-        low + "² = " + (low*low) +
+        low + "² = " + (low * low) +
         "<br>" +
-        high + "² = " + (high*high) +
+        high + "² = " + (high * high) +
         "</p>" +
 
         "<p>" +
@@ -106,80 +171,6 @@ function showSolution(){
         currentRoot.toFixed(2) +
         "</p>";
 }
-Submit
-</button>
-<button onclick="showSolution()">
-Solution
-</button>
-  
-<button onclick="newQuestion()">
-Next Question
-</button>
-
-<div id="feedback"></div>
-
-</div>
-
-</div>
-
-<script>
-
-let currentNumber;
-let currentRoot;
-
-function startGame(){
-
-    document.getElementById("menu").style.display="none";
-    document.getElementById("gameArea").style.display="block";
-
-    newQuestion();
-}
-
-function newQuestion(){
-
-    currentNumber = Math.floor(Math.random()*400)+1;
-
-    while(Number.isInteger(Math.sqrt(currentNumber))){
-        currentNumber = Math.floor(Math.random()*400)+1;
-    }
-
-    currentRoot = Math.sqrt(currentNumber);
-
-    document.getElementById("question").innerHTML =
-    "Estimate √" + currentNumber + " to the nearest tenth";
-
-    document.getElementById("answer").value = "";
-
-    document.getElementById("feedback").innerHTML = "";
-}
-
-function checkAnswer(){
-
-    let answer =
-    parseFloat(document.getElementById("answer").value);
-
-    if(isNaN(answer)){
-        document.getElementById("feedback").innerHTML =
-        "Please enter an estimate.";
-        return;
-    }
-
-if(Math.abs(answer-currentRoot)<=0.15){
-
-    document.getElementById("feedback").innerHTML =
-    "✅ Correct!";
-
-    setTimeout(newQuestion,2000);
-
-}
-else{
-
-    document.getElementById("feedback").innerHTML =
-    "❌ Correct answer: " +
-    currentRoot.toFixed(2);
-
-    setTimeout(newQuestion,2000);
-}    
 
 </script>
 
